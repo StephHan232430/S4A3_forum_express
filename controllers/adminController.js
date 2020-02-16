@@ -8,7 +8,9 @@ const adminController = {
   getRestaurants: (req, res) => {
     return Restaurant.findAll().then(restaurants => {
       return res.render('admin/restaurants', {
-        restaurants: JSON.parse(JSON.stringify(restaurants))
+        restaurants: restaurants.map(restaurant => {
+          return restaurant.get()
+        })
       })
     })
   },
@@ -56,14 +58,14 @@ const adminController = {
   getRestaurant: (req, res) => {
     return Restaurant.findByPk(req.params.id).then(restaurant => {
       return res.render('admin/restaurant', {
-        restaurant: JSON.parse(JSON.stringify(restaurant))
+        restaurant: restaurant.get()
       })
     })
   },
   editRestaurant: (req, res) => {
     return Restaurant.findByPk(req.params.id).then(restaurant => {
       return res.render('admin/create', {
-        restaurant: JSON.parse(JSON.stringify(restaurant))
+        restaurant: restaurant.get()
       })
     })
   },
@@ -137,7 +139,9 @@ const adminController = {
         }
       }
       return res.render('admin/users', {
-        users: JSON.parse(JSON.stringify(users))
+        users: users.map(user => {
+          return user.get()
+        })
       })
     })
   },
