@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "password",
-    "database": "forum",
+    "database": "forum_express",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
@@ -19,7 +19,7 @@
     "dialect": "postgres",
     "protocol": "postgres",
     "dialectOptions": {
-        "ssl": true
+      "ssl": true
     }
   }
 }
