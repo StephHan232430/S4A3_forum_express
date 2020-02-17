@@ -1,16 +1,19 @@
 const db = require('../models')
 const Restaurant = db.Restaurant
 const User = db.User
+const Category = db.Category
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const adminController = {
   getRestaurants: (req, res) => {
-    return Restaurant.findAll().then(restaurants => {
+    return Restaurant.findAll({
+      nest: true,
+      raw: true,
+      include: [Category]
+    }).then(restaurants => {
       return res.render('admin/restaurants', {
-        restaurants: restaurants.map(restaurant => {
-          return restaurant.get()
-        })
+        restaurants
       })
     })
   },
@@ -56,16 +59,24 @@ const adminController = {
     }
   },
   getRestaurant: (req, res) => {
-    return Restaurant.findByPk(req.params.id).then(restaurant => {
+    return Restaurant.findByPk(req.params.id, {
+      include: [Category],
+      nest: true,
+      raw: true
+    }).then(restaurant => {
       return res.render('admin/restaurant', {
-        restaurant: restaurant.get()
+        restaurant
       })
     })
   },
   editRestaurant: (req, res) => {
-    return Restaurant.findByPk(req.params.id).then(restaurant => {
+    return Restaurant.findByPk(req.params.id, {
+      include: [Category],
+      nest: true,
+      raw: true
+    }).then(restaurant => {
       return res.render('admin/create', {
-        restaurant: restaurant.get()
+        restaurant
       })
     })
   },
@@ -128,20 +139,18 @@ const adminController = {
   // 使用者權限管理
   // 顯示使用者清單
   getUsers: (req, res) => {
-    return User.findAll().then(users => {
+    return User.findAll({ raw: true }).then(users => {
       // 登入中使用者不顯示權限變換選項
       let loggedUserId = req.user.id
       for (user of users) {
         if (user.id === loggedUserId) {
-          user.dataValues.showLink = false
+          user.showLink = false
         } else {
-          user.dataValues.showLink = true
+          user.showLink = true
         }
       }
       return res.render('admin/users', {
-        users: users.map(user => {
-          return user.get()
-        })
+        users
       })
     })
   },
