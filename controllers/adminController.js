@@ -18,15 +18,30 @@ const adminController = {
     })
   },
   createRestaurant: (req, res) => {
-    return res.render('admin/create')
+    Category.findAll({
+      raw: true
+    }).then(categories => {
+      return res.render('admin/create', {
+        categories
+      })
+    })
   },
   postRestaurant: (req, res) => {
-    let { name, tel, address, opening_hours, description } = req.body
+    let {
+      name,
+      tel,
+      address,
+      opening_hours,
+      description,
+      categoryId
+    } = req.body
     if (!name) {
       req.flash('error_messages', "name didn't exist")
       return res.redirect('back')
     }
-    const { file } = req
+    const {
+      file
+    } = req
     if (file) {
       imgur.setClientID(IMGUR_CLIENT_ID)
       imgur
@@ -37,7 +52,8 @@ const adminController = {
             address,
             opening_hours,
             description,
-            image: file ? img.data.link : null
+            image: file ? img.data.link : null,
+            CategoryId: categoryId
           })
         })
         .then(restaurant => {
@@ -51,7 +67,8 @@ const adminController = {
         address,
         opening_hours,
         description,
-        image: null
+        image: null,
+        CategoryId: categoryId
       }).then(restaurant => {
         req.flash('success_messages', 'restaurant was successfully created')
         return res.redirect('/admin/restaurants')
@@ -75,19 +92,33 @@ const adminController = {
       nest: true,
       raw: true
     }).then(restaurant => {
-      return res.render('admin/create', {
-        restaurant
+      Category.findAll({
+        raw: true
+      }).then(categories => {
+        return res.render('admin/create', {
+          restaurant,
+          categories
+        })
       })
     })
   },
   putRestaurant: (req, res) => {
-    let { name, tel, address, opening_hours, description } = req.body
+    let {
+      name,
+      tel,
+      address,
+      opening_hours,
+      description,
+      categoryId
+    } = req.body
     if (!name) {
       req.flash('error_messages', "name didn't exist")
       return res.redirect('back')
     }
 
-    const { file } = req
+    const {
+      file
+    } = req
     if (file) {
       imgur.setClientID(IMGUR_CLIENT_ID)
       imgur.upload(file.path, (err, img) => {
@@ -99,7 +130,8 @@ const adminController = {
               address,
               opening_hours,
               description,
-              image: file ? img.data.link : restaurant.image
+              image: file ? img.data.link : restaurant.image,
+              CategoryId: categoryId
             })
             .then(restaurant => {
               req.flash(
@@ -119,7 +151,8 @@ const adminController = {
             address,
             opening_hours,
             description,
-            image: restaurant.image
+            image: restaurant.image,
+            CategoryId: categoryId
           })
           .then(restaurant => {
             req.flash('success_messages', 'restaurant was successfully updated')
@@ -139,7 +172,9 @@ const adminController = {
   // 使用者權限管理
   // 顯示使用者清單
   getUsers: (req, res) => {
-    return User.findAll({ raw: true }).then(users => {
+    return User.findAll({
+      raw: true
+    }).then(users => {
       // 登入中使用者不顯示權限變換選項
       let loggedUserId = req.user.id
       for (user of users) {

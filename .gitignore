@@ -2,6 +2,7 @@ node_modules/
 .DS_Store*
 Icon?
 ._*
+.vscode
 package-lock.json
 *.log
 *.gz
