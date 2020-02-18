@@ -75,7 +75,7 @@ const userController = {
   // 編輯profile
   putUser: (req, res) => {
     if (!req.body.name) {
-      req.flash('error_messages', "name didn't exist")
+      req.flash('error_messages', 'Name欄位不得空白！')
       return res.redirect('back')
     }
 
