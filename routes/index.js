@@ -36,6 +36,16 @@ module.exports = (app, passport) => {
     commentController.deleteComment
   )
 
+  // Profile相關路由
+  app.get('/users/:id', authenticated, userController.getUser)
+  app.get('/users/:id/edit', authenticated, userController.editUser)
+  app.put(
+    '/users/:id',
+    authenticated,
+    upload.single('image'),
+    userController.putUser
+  )
+
   app.get('/admin', authenticatedAdmin, (req, res) =>
     res.redirect('/admin/restaurants')
   )
