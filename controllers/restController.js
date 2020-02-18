@@ -63,8 +63,8 @@ const restController = {
       ]
     }).then(restaurant => {
       return res.render('restaurant', {
-        // eager loading時，似乎無法用options.nest和options.raw解決
-        // restaurant: JSON.parse(JSON.stringify(restaurant))
+        // nested eager loading時，似乎無法用options.nest和options.raw解決
+        // 可用 restaurant: JSON.parse(JSON.stringify(restaurant))
         restaurant: restaurant.get({ plain: true })
       })
     })
