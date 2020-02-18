@@ -2,6 +2,7 @@ const restController = require('../controllers/restController')
 const adminController = require('../controllers/adminController')
 const userController = require('../controllers/userController')
 const categoryController = require('../controllers/categoryController')
+const commentController = require('../controllers/commentController')
 const multer = require('multer')
 const upload = multer({
   dest: 'temp/'
@@ -27,6 +28,8 @@ module.exports = (app, passport) => {
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated, restController.getRestaurants)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
+
+  app.post('/comments', authenticated, commentController.postComment)
 
   app.get('/admin', authenticatedAdmin, (req, res) =>
     res.redirect('/admin/restaurants')
@@ -70,11 +73,31 @@ module.exports = (app, passport) => {
   )
   app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
   app.put('/admin/users/:id', authenticatedAdmin, adminController.putUser)
-  app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
-  app.post('/admin/categories', authenticatedAdmin, categoryController.postCategory)
-  app.get('/admin/categories/:id', authenticatedAdmin, categoryController.getCategories)
-  app.put('/admin/categories/:id', authenticatedAdmin, categoryController.putCategory)
-  app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
+  app.get(
+    '/admin/categories',
+    authenticatedAdmin,
+    categoryController.getCategories
+  )
+  app.post(
+    '/admin/categories',
+    authenticatedAdmin,
+    categoryController.postCategory
+  )
+  app.get(
+    '/admin/categories/:id',
+    authenticatedAdmin,
+    categoryController.getCategories
+  )
+  app.put(
+    '/admin/categories/:id',
+    authenticatedAdmin,
+    categoryController.putCategory
+  )
+  app.delete(
+    '/admin/categories/:id',
+    authenticatedAdmin,
+    categoryController.deleteCategory
+  )
 
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)
