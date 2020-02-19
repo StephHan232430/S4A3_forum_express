@@ -18,6 +18,14 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'UserId',
       as: 'FavoritedRestaurants'
     })
+
+    // 1.註冊關聯
+    User.belongsToMany(models.Restaurant, {
+      through: models.Like,
+      foreignKey: 'UserId',
+      // 2.passport.js中，兩model互相include時，要說清楚用哪張join table
+      as: 'LikedRestaurants'
+    })
   }
   return User
 }

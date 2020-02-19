@@ -17,11 +17,14 @@
     <p>{{restaurant.description}}</p>
     <a class="btn btn-primary" href="/restaurants/{{restaurant.id}}/stat" role="button">Dashboard</a>
     {{#if isFavorited }}
-    <form action="/favorite/{{restaurant.id}}?_method=DELETE" method="POST" style="display: contents;"><button
-      type="submit" class="btn btn-danger">移除最愛</button></form>
+    <form class="d-inline-block" action="/favorite/{{restaurant.id}}?_method=DELETE" method="POST" style="display: contents;"><button type="submit" class="btn btn-danger">移除最愛</button></form>
     {{else}}
-    <form action="/favorite/{{restaurant.id}}" method="POST" style="display: contents;"><button type="submit"
-      class="btn btn-primary">加到最愛</button></form>
+    <form class="d-inline-block" action="/favorite/{{restaurant.id}}" method="POST" style="display: contents;"><button type="submit" class="btn btn-primary">加到最愛</button></form>
+    {{/if}}
+    {{#if isLiked }}
+    <form class="d-inline-block" action="/like/{{restaurant.id}}?_method=DELETE" method="POST" style="display: contents;"><button type="submit" class="btn btn-danger">Unlike</button></form>
+    {{else}}
+    <form class="d-inline-block" action="/like/{{restaurant.id}}" method="POST" style="display: contents;"><button type="submit" class="btn btn-primary">Like</button></form>
     {{/if}}
   </div>
   <hr>
