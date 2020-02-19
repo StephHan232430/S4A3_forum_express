@@ -26,6 +26,18 @@ module.exports = (sequelize, DataTypes) => {
       // 2.passport.js中，兩model互相include時，要說清楚用哪張join table
       as: 'LikedRestaurants'
     })
+
+    User.belongsToMany(User, {
+      through: models.Followship,
+      foreignKey: 'followingId',
+      as: 'Followers'
+    })
+
+    User.belongsToMany(User, {
+      through: models.Followship,
+      foreignKey: 'followerId',
+      as: 'Followings'
+    })
   }
   return User
 }
