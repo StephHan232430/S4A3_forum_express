@@ -62,6 +62,7 @@ const restController = {
         }
       ]
     }).then(restaurant => {
+      restaurant.increment('viewCounts')
       return res.render('restaurant', {
         // nested eager loading時，似乎無法用options.nest和options.raw解決
         // 可用 restaurant: JSON.parse(JSON.stringify(restaurant))
