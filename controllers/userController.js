@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
+const Comment = db.Comment
+const Restaurant = db.Restaurant
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
@@ -50,8 +52,20 @@ const userController = {
   getUser: (req, res) => {
     // 不得透過改網址列params切換到其他使用者的profile頁面，若更改則導回登入頁面
     if (Number(req.params.id) === req.user.id) {
-      User.findByPk(req.params.id, { raw: true }).then(user => {
-        return res.render('profile', { user })
+      // 撈user時，用nested eager loading把相關comments和restaurants一起撈出來
+      User.findByPk(req.params.id, {
+        include: [{ model: Comment, include: [Restaurant] }]
+      }).then(user => {
+        // 把Comments中的Restaurants逐個push進commentedRestaurants陣列，供view迭代
+        user = JSON.parse(JSON.stringify(user))
+        let commentedRestaurants = []
+        user.Comments.map(comment => {
+          commentedRestaurants.push(comment.Restaurant)
+        })
+        return res.render('profile', {
+          user,
+          commentedRestaurants
+        })
       })
     } else {
       req.flash('error_messages', '非法操作，請重新登入！')
