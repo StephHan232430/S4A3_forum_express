@@ -90,6 +90,23 @@ const restController = {
         })
       })
     })
+  },
+  getStat: (req, res) => {
+    return Restaurant.findByPk(req.params.id, {
+      include: [Category],
+      nest: true,
+      raw: true
+    }).then(restaurant => {
+      Comment.findAndCountAll({
+        where: { RestaurantId: restaurant.id },
+        raw: true
+      }).then(result => {
+        return res.render('dashboard', {
+          restaurant,
+          result
+        })
+      })
+    })
   }
 }
 
