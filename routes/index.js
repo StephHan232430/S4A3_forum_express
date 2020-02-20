@@ -46,6 +46,7 @@ module.exports = (app, passport) => {
     commentController.deleteComment
   )
 
+  app.get('/users/top', authenticated, userController.getTopUser)
   // Profile相關路由
   app.get('/users/:id', authenticated, userController.getUser)
   app.get('/users/:id/edit', authenticated, userController.editUser)
