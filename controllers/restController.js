@@ -118,6 +118,30 @@ const restController = {
         })
       })
     })
+  },
+  getTopRestaurant: (req, res) => {
+    // 呼叫model/restaurant.js中定義的關聯、別名
+    return Restaurant.findAll({
+      include: [{ model: User, as: 'FavoritedUsers' }]
+    }).then(restaurants => {
+      // 將撈出的餐廳資料進行整理：
+      restaurants = restaurants.map(restaurant => ({
+        ...restaurant.dataValues,
+        // description裁短
+        description: restaurant.description.substring(0, 50),
+        // 將收藏過此restaurant的user數，設定為此restaurant的FavoritedCount屬性，供後續view呈現
+        FavoritedCount: restaurant.FavoritedUsers.length,
+        // 比對目前登入者(req.user)收藏過的餐廳id群中是否包含逐個傳入的restaurant.id，並設為restaurant的isFavorited屬性，供後續view判斷
+        isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(
+          restaurant.id
+        )
+      }))
+      // 依FavoritedCount數值大小排序後，取前10筆
+      restaurants = restaurants
+        .sort((a, b) => b.FavoritedCount - a.FavoritedCount)
+        .slice(0, 10)
+      return res.render('topRestaurant', { restaurants })
+    })
   }
 }
 

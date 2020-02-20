@@ -28,6 +28,8 @@ module.exports = (app, passport) => {
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated, restController.getRestaurants)
   app.get('/restaurants/feeds', authenticated, restController.getFeeds)
+  // 要放在/restaurants/:id之前才解析得到
+  app.get('/restaurants/top', authenticated, restController.getTopRestaurant)
   app.get('/restaurants/:id/stat', authenticated, restController.getStat)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
   app.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
