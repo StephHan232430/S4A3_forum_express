@@ -53,28 +53,40 @@ const userController = {
   },
   // 瀏覽profile
   getUser: (req, res) => {
-    // 不得透過改網址列params切換到其他使用者的profile頁面，若更改則導回登入頁面
-    if (Number(req.params.id) === req.user.id) {
-      // 撈user時，用nested eager loading把相關comments和restaurants一起撈出來
-      User.findByPk(req.params.id, {
-        include: [{ model: Comment, include: [Restaurant] }]
-      }).then(user => {
-        // 把Comments中的Restaurants逐個push進commentedRestaurants陣列，供view迭代
-        user = JSON.parse(JSON.stringify(user))
-        let commentedRestaurants = []
-        user.Comments.map(comment => {
-          commentedRestaurants.push(comment.Restaurant)
-        })
-        return res.render('profile', {
-          user,
-          commentedRestaurants
-        })
+    User.findByPk(req.params.id, {
+      include: [
+        { model: Comment, include: [Restaurant] },
+        { model: Restaurant, as: 'FavoritedRestaurants' },
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' }
+      ]
+    }).then(user => {
+      let uniqueArray = []
+      for (let i = 0; i < user.Comments.length; i++) {
+        if (
+          !uniqueArray
+            .map(item => item.id)
+            .includes(user.Comments[i].Restaurant.dataValues.id)
+        ) {
+          uniqueArray.push(user.Comments[i].Restaurant.dataValues)
+        }
+      }
+
+      const loggedUserId = req.user.id
+      const profileId = Number(req.params.id)
+      if (loggedUserId === profileId) {
+        user.dataValues.isLogged = true
+      } else {
+        user.dataValues.isFollowed = user.Followers.map(r => r.id).includes(
+          req.user.id
+        )
+        user.dataValues.isLogged = false
+      }
+      return res.render('profile', {
+        profileUser: user.get({ plain: true }),
+        commentedRestaurants: uniqueArray
       })
-    } else {
-      req.flash('error_messages', '非法操作，請重新登入！')
-      req.logout()
-      res.redirect('/signin')
-    }
+    })
   },
   // 瀏覽編輯profile頁面
   editUser: (req, res) => {
@@ -184,6 +196,12 @@ const userController = {
         isFollowed: req.user.Followings.map(d => d.id).includes(user.id)
       }))
       users = users.sort((a, b) => b.FollowerCount - a.FollowerCount)
+      for (let user of users) {
+        user.id === req.user.id
+          ? (user.isLogged = true)
+          : (user.isLogged = false)
+      }
+      console.log(users)
       return res.render('topUser', { users })
     })
   },
