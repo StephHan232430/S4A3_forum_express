@@ -55,22 +55,23 @@ const userController = {
   getUser: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
-        { model: Comment, include: [Restaurant] },
+        // { model: Comment, include: [Restaurant] },
+        { model: Restaurant, as: 'CommentedRestaurants' },
         { model: Restaurant, as: 'FavoritedRestaurants' },
         { model: User, as: 'Followers' },
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      const { Comments } = user
-      let uniqueRestaurants = new Map()
-      Comments.map(comment =>
-        uniqueRestaurants.set(comment.RestaurantId, comment.Restaurant)
-      )
-
-      return res.render('profile', {
-        profileUser: user.get({ plain: true }),
-        uniqueRestaurants: [...uniqueRestaurants.values()]
-      })
+      console.log(user.CommentedRestaurants[0].Comment)
+      // const { Comments } = user
+      // let uniqueRestaurants = new Map()
+      // Comments.map(comment =>
+      //   uniqueRestaurants.set(comment.RestaurantId, comment.Restaurant)
+      // )
+      // return res.render('profile', {
+      //   profileUser: user.get({ plain: true }),
+      //   uniqueRestaurants: [...uniqueRestaurants.values()]
+      // })
     })
   },
   // 瀏覽編輯profile頁面
