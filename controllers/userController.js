@@ -61,16 +61,12 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      let uniqueArray = []
-      for (let i = 0; i < user.Comments.length; i++) {
-        if (
-          !uniqueArray
-            .map(item => item.id)
-            .includes(user.Comments[i].Restaurant.dataValues.id)
-        ) {
-          uniqueArray.push(user.Comments[i].Restaurant.dataValues)
-        }
-      }
+      let uniqueComments = new Set()
+      uniqueComments = user.Comments.filter(
+        comment =>
+          !uniqueComments.has(comment.RestaurantId) &&
+          uniqueComments.add(comment.RestaurantId)
+      )
 
       const loggedUserId = req.user.id
       const profileId = Number(req.params.id)
@@ -84,7 +80,7 @@ const userController = {
       }
       return res.render('profile', {
         profileUser: user.get({ plain: true }),
-        commentedRestaurants: uniqueArray
+        commentedRestaurants: JSON.parse(JSON.stringify(uniqueComments))
       })
     })
   },

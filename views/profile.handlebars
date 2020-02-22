@@ -14,11 +14,11 @@
         {{#if profileUser.isLogged}}
         <a class="btn btn-primary" href="/users/{{profileUser.id}}/edit" role="button">Edit</a>
         {{else}}
-        {{#if profileUser.isFollowed }}
-        <form action="/following/{{profileUser.id}}?_method=DELETE" method="POST" style="display: contents;"><button type="submit" class="btn btn-danger">取消追蹤</button></form>
-        {{else}}
-        <form action="/following/{{profileUser.id}}" method="POST" style="display: contents;"><button type="submit" class="btn btn-primary">追蹤</button></form>
-        {{/if}}
+          {{#if profileUser.isFollowed }}
+          <form action="/following/{{profileUser.id}}?_method=DELETE" method="POST" style="display: contents;"><button type="submit" class="btn btn-danger">取消追蹤</button></form>
+          {{else}}
+          <form action="/following/{{profileUser.id}}" method="POST" style="display: contents;"><button type="submit" class="btn btn-primary">追蹤</button></form>
+          {{/if}}
         {{/if}}
 
       </div>
@@ -40,7 +40,7 @@
     <h5 class="card-header">{{commentedRestaurants.length}} 已評論餐廳</h5>
     <div class="card-body">
       {{#each commentedRestaurants}}
-      <a href="/restaurants/{{this.id}}"><img class="img-thumbnail" src="{{this.image}}" style="width: 100px;"></a>
+      <a href="/restaurants/{{this.RestaurantId}}"><img class="img-thumbnail" src="{{this.Restaurant.image}}" style="width: 100px;"></a>
       {{/each}}
     </div>
   </div>
