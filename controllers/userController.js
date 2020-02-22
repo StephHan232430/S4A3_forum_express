@@ -61,26 +61,15 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      let uniqueComments = new Set()
-      uniqueComments = user.Comments.filter(
-        comment =>
-          !uniqueComments.has(comment.RestaurantId) &&
-          uniqueComments.add(comment.RestaurantId)
+      const { Comments } = user
+      let uniqueRestaurants = new Map()
+      Comments.map(comment =>
+        uniqueRestaurants.set(comment.RestaurantId, comment.Restaurant)
       )
 
-      const loggedUserId = req.user.id
-      const profileId = Number(req.params.id)
-      if (loggedUserId === profileId) {
-        user.dataValues.isLogged = true
-      } else {
-        user.dataValues.isFollowed = user.Followers.map(r => r.id).includes(
-          req.user.id
-        )
-        user.dataValues.isLogged = false
-      }
       return res.render('profile', {
         profileUser: user.get({ plain: true }),
-        commentedRestaurants: JSON.parse(JSON.stringify(uniqueComments))
+        uniqueRestaurants: [...uniqueRestaurants.values()]
       })
     })
   },
