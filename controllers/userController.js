@@ -55,23 +55,33 @@ const userController = {
   getUser: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
-        // { model: Comment, include: [Restaurant] },
-        { model: Restaurant, as: 'CommentedRestaurants' },
+        { model: Comment, include: [Restaurant] },
         { model: Restaurant, as: 'FavoritedRestaurants' },
         { model: User, as: 'Followers' },
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      console.log(user.CommentedRestaurants[0].Comment)
-      // const { Comments } = user
-      // let uniqueRestaurants = new Map()
-      // Comments.map(comment =>
-      //   uniqueRestaurants.set(comment.RestaurantId, comment.Restaurant)
-      // )
-      // return res.render('profile', {
-      //   profileUser: user.get({ plain: true }),
-      //   uniqueRestaurants: [...uniqueRestaurants.values()]
-      // })
+      const { Comments } = user
+      let uniqueRestaurants = new Map()
+      Comments.map(comment =>
+        uniqueRestaurants.set(comment.RestaurantId, comment.Restaurant)
+      )
+
+      const loggedUserId = req.user.id
+      const profileId = Number(req.params.id)
+      if (loggedUserId === profileId) {
+        user.dataValues.isLogged = true
+      } else {
+        user.dataValues.isFollowed = user.Followers.map(r => r.id).includes(
+          req.user.id
+        )
+        user.dataValues.isLogged = false
+      }
+
+      return res.render('profile', {
+        profileUser: user.get({ plain: true }),
+        uniqueRestaurants: [...uniqueRestaurants.values()]
+      })
     })
   },
   // 瀏覽編輯profile頁面
