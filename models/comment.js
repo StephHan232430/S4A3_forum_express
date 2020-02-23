@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     {}
   )
   Comment.associate = function(models) {
-    Comment.belongsTo(models.User)
-    Comment.belongsTo(models.Restaurant)
+    // Comment.belongsTo(models.User)
+    // Comment.belongsTo(models.Restaurant)
   }
   return Comment
 }

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   )
   User.associate = function(models) {
-    User.hasMany(models.Comment)
+    // User.hasMany(models.Comment)
     User.belongsToMany(models.Restaurant, {
       through: models.Favorite,
       foreignKey: 'UserId',
@@ -37,6 +37,12 @@ module.exports = (sequelize, DataTypes) => {
       through: models.Followship,
       foreignKey: 'followerId',
       as: 'Followings'
+    })
+
+    User.belongsToMany(models.Restaurant, {
+      through: models.Comment,
+      foreignKey: 'UserId',
+      as: 'CommentedRestaurants'
     })
   }
   return User

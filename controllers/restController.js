@@ -62,22 +62,24 @@ const restController = {
         Category,
         { model: User, as: 'FavoritedUsers' },
         { model: User, as: 'LikedUsers' },
-        { model: Comment, include: [User] }
+        // { model: Comment, include: [User] }
+        { model: User, as: 'CommentedUsers' }
       ]
     }).then(restaurant => {
-      const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(
-        req.user.id
-      )
-      // 把藉由註冊關聯時命名的屬性撈出來的資料，逐個丟進map()處理後，產生由LikedUser們的id組成的array，再把passport驗證過的req.user的id拿來比對array，若array中有id和req.user的id一樣，includes()回傳true，並把true存成常數，供view判斷用
-      const isLiked = restaurant.LikedUsers.map(d => d.id).includes(req.user.id)
-      restaurant.increment('viewCounts')
-      return res.render('restaurant', {
-        // nested eager loading時，似乎無法用options.nest和options.raw解決
-        // 可用 restaurant: JSON.parse(JSON.stringify(restaurant))
-        restaurant: restaurant.get({ plain: true }),
-        isFavorited,
-        isLiked
-      })
+      console.log(restaurant.CommentedUsers[0].Comment)
+      // const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(
+      //   req.user.id
+      // )
+      // // 把藉由註冊關聯時命名的屬性撈出來的資料，逐個丟進map()處理後，產生由LikedUser們的id組成的array，再把passport驗證過的req.user的id拿來比對array，若array中有id和req.user的id一樣，includes()回傳true，並把true存成常數，供view判斷用
+      // const isLiked = restaurant.LikedUsers.map(d => d.id).includes(req.user.id)
+      // restaurant.increment('viewCounts')
+      // return res.render('restaurant', {
+      //   // nested eager loading時，似乎無法用options.nest和options.raw解決
+      //   // 可用 restaurant: JSON.parse(JSON.stringify(restaurant))
+      //   restaurant: restaurant.get({ plain: true }),
+      //   isFavorited,
+      //   isLiked
+      // })
     })
   },
   getFeeds: (req, res) => {

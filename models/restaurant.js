@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   )
   Restaurant.associate = function(models) {
     Restaurant.belongsTo(models.Category)
-    Restaurant.hasMany(models.Comment)
+    // Restaurant.hasMany(models.Comment)
     Restaurant.belongsToMany(models.User, {
       through: models.Favorite,
       foreignKey: 'RestaurantId',
@@ -28,6 +28,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'RestaurantId',
       // 2.透過這種關聯找出來的那群東西要叫什麼 => 意即passport.js中，兩model互相include時，要說清楚用哪張join table
       as: 'LikedUsers'
+    })
+
+    Restaurant.belongsToMany(models.User, {
+      through: models.Comment,
+      foreignKey: 'RestaurantId',
+      as: 'CommentedUsers'
     })
   }
   return Restaurant
