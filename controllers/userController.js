@@ -55,19 +55,17 @@ const userController = {
   getUser: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
-        // { model: Comment, include: [Restaurant] },
-        { model: Restaurant, as: 'CommentedRestaurants' },
+        { model: Comment, include: [Restaurant] },
         { model: Restaurant, as: 'FavoritedRestaurants' },
         { model: User, as: 'Followers' },
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      // console.log(user.CommentedRestaurants[0].Comment)
-      // const { Comments } = user
-      // let uniqueRestaurants = new Map()
-      // Comments.map(comment =>
-      //   uniqueRestaurants.set(comment.RestaurantId, comment.Restaurant)
-      // )
+      const { Comments } = user
+      let uniqueRestaurants = new Map()
+      Comments.map(comment =>
+        uniqueRestaurants.set(comment.RestaurantId, comment.Restaurant)
+      )
 
       const loggedUserId = req.user.id
       const profileId = Number(req.params.id)
@@ -81,8 +79,8 @@ const userController = {
       }
 
       return res.render('profile', {
-        profileUser: user.get({ plain: true })
-        // uniqueRestaurants: [...uniqueRestaurants.values()]
+        profileUser: user.get({ plain: true }),
+        uniqueRestaurants: [...uniqueRestaurants.values()]
       })
     })
   },

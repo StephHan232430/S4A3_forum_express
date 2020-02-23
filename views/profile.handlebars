@@ -7,7 +7,7 @@
       <div class="col-md-8">
         <h6>{{profileUser.name}}</h6>
         <p>{{profileUser.email}}</p>
-        <h6>{{profileUser.CommentedRestaurants.length}} 已評論餐廳</h6>
+        <h6>{{uniqueRestaurants.length}} 已評論餐廳</h6>
         <h6>{{profileUser.FavoritedRestaurants.length}} 收藏的餐廳</h6>
         <h6>{{profileUser.Followings.length}} followings (追蹤者)</h6>
         <h6>{{profileUser.Followers.length}} followers (追隨者)</h6>
@@ -37,10 +37,10 @@
     </div>
   </div>
   <div class="card col-7 p-0">
-    <h5 class="card-header">{{profileUser.CommentedRestaurants.length}} 已評論餐廳</h5>
+    <h5 class="card-header">{{uniqueRestaurants.length}} 已評論餐廳</h5>
     <div class="card-body">
-      {{#each profileUser.CommentedRestaurants}}
-      <a href="/restaurants/{{this.id}}"><img class="img-thumbnail" src="{{this.image}}" style="width: 100px;"></a>
+      {{#each uniqueRestaurants}}
+      <a href="/restaurants/{{this.dataValues.id}}"><img class="img-thumbnail" src="{{this.dataValues.image}}" style="width: 100px;"></a>
       {{/each}}
     </div>
   </div>
