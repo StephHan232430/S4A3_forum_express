@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+
 const restController = require('../controllers/restController')
 const adminController = require('../controllers/adminController')
 const userController = require('../controllers/userController')
@@ -75,11 +76,14 @@ router.delete(
 router.get('/admin', authenticatedAdmin, (req, res) =>
   res.redirect('/admin/restaurants')
 )
+
+// 原版admin後台
 router.get(
   '/admin/restaurants',
   authenticatedAdmin,
   adminController.getRestaurants
 )
+
 router.get(
   '/admin/restaurants/create',
   authenticatedAdmin,
