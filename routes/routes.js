@@ -92,7 +92,6 @@ router.get('/admin', authenticatedAdmin, (req, res) =>
   res.redirect('/admin/restaurants')
 )
 
-// 原版admin後台
 router.get(
   '/admin/restaurants',
   authenticatedAdmin,
@@ -124,6 +123,7 @@ router.get(
   adminController.editRestaurant
 )
 
+// 後台修改個別餐廳
 router.put(
   '/admin/restaurants/:id',
   authenticatedAdmin,

@@ -16,13 +16,17 @@ router.post(
   adminController.postRestaurant
 )
 
-// 後台瀏覽個別餐廳
+// 後台修改個別餐廳
+router.put(
+  '/admin/restaurants/:id',
+  upload.single('image'),
+  adminController.putRestaurant
+)
+
 router.get('/admin/restaurants/:id', adminController.getRestaurant)
 
-// 後台瀏覽全部類別
 router.get('/admin/categories', categoryController.getCategories)
 
-// 後台刪除單一餐廳
 router.delete('/admin/restaurants/:id', adminController.deleteRestaurant)
 
 module.exports = router

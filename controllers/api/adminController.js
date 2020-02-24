@@ -19,6 +19,13 @@ const apiAdminController = {
       return res.json(data)
     })
   },
+
+  // 後台修改個別餐廳
+  putRestaurant: (req, res) => {
+    adminService.putRestaurant(req, res, data => {
+      return res.json(data)
+    })
+  },
   deleteRestaurant: (req, res) => {
     adminService.deleteRestaurant(req, res, data => {
       return res.json(data)

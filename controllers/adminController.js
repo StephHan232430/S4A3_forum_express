@@ -52,62 +52,17 @@ const adminController = {
       })
     })
   },
-  putRestaurant: (req, res) => {
-    let {
-      name,
-      tel,
-      address,
-      opening_hours,
-      description,
-      categoryId
-    } = req.body
-    if (!name) {
-      req.flash('error_messages', "name didn't exist")
-      return res.redirect('back')
-    }
 
-    const { file } = req
-    if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID)
-      imgur.upload(file.path, (err, img) => {
-        return Restaurant.findByPk(req.params.id).then(restaurant => {
-          restaurant
-            .update({
-              name,
-              tel,
-              address,
-              opening_hours,
-              description,
-              image: file ? img.data.link : restaurant.image,
-              CategoryId: categoryId
-            })
-            .then(restaurant => {
-              req.flash(
-                'success_messages',
-                'restaurant was successfully updated'
-              )
-              res.redirect('/admin/restaurants')
-            })
-        })
-      })
-    } else {
-      return Restaurant.findByPk(req.params.id).then(restaurant => {
-        restaurant
-          .update({
-            name,
-            tel,
-            address,
-            opening_hours,
-            description,
-            image: restaurant.image,
-            CategoryId: categoryId
-          })
-          .then(restaurant => {
-            req.flash('success_messages', 'restaurant was successfully updated')
-            res.redirect('/admin/restaurants')
-          })
-      })
-    }
+  // 後台修改個別餐廳
+  putRestaurant: (req, res) => {
+    adminService.putRestaurant(req, res, data => {
+      if (data['status'] === 'error') {
+        req.flash('error_messages', data['message'])
+        return res.redirect('back')
+      }
+      req.flash('success_messages', data['message'])
+      res.redirect('/admin/restaurants')
+    })
   },
   deleteRestaurant: (req, res) => {
     adminService.deleteRestaurant(req, res, data => {

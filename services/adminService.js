@@ -69,6 +69,65 @@ const adminService = {
       })
     }
   },
+
+  // 後台修改個別餐廳
+  putRestaurant: (req, res, callback) => {
+    let {
+      name,
+      tel,
+      address,
+      opening_hours,
+      description,
+      categoryId
+    } = req.body
+    if (!name) {
+      return callback({ status: 'error', message: "name didn't exist" })
+    }
+
+    const { file } = req
+    if (file) {
+      imgur.setClientID(IMGUR_CLIENT_ID)
+      imgur.upload(file.path, (err, img) => {
+        return Restaurant.findByPk(req.params.id).then(restaurant => {
+          restaurant
+            .update({
+              name,
+              tel,
+              address,
+              opening_hours,
+              description,
+              image: file ? img.data.link : restaurant.image,
+              CategoryId: categoryId
+            })
+            .then(restaurant => {
+              return callback({
+                status: 'success',
+                message: 'restaurant was successfully updated'
+              })
+            })
+        })
+      })
+    } else {
+      return Restaurant.findByPk(req.params.id).then(restaurant => {
+        restaurant
+          .update({
+            name,
+            tel,
+            address,
+            opening_hours,
+            description,
+            image: restaurant.image,
+            CategoryId: categoryId
+          })
+          .then(restaurant => {
+            return callback({
+              status: 'success',
+              message: 'restaurant was successfully updated'
+            })
+          })
+      })
+    }
+  },
   deleteRestaurant: (req, res, callback) => {
     return Restaurant.findByPk(req.params.id).then(restaurant => {
       restaurant.destroy().then(restaurant => {
