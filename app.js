@@ -4,6 +4,8 @@ const db = require('./models')
 const bodyParser = require('body-parser')
 const flash = require('connect-flash')
 const session = require('express-session')
+// JWT_SECRET吃不到時，可將L9 passport移到L15之後(即require dotenv的設定檔之後)，才能讀到.env內的設定
+// 也可以直接在passport.js中引入dotenv的設定檔
 const passport = require('./config/passport')
 const methodOverride = require('method-override')
 const app = express()
