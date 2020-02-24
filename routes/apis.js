@@ -16,7 +16,6 @@ router.post(
   adminController.postRestaurant
 )
 
-// 後台修改個別餐廳
 router.put(
   '/admin/restaurants/:id',
   upload.single('image'),
@@ -26,6 +25,8 @@ router.put(
 router.get('/admin/restaurants/:id', adminController.getRestaurant)
 
 router.get('/admin/categories', categoryController.getCategories)
+
+router.post('/admin/categories', categoryController.postCategory)
 
 router.delete('/admin/restaurants/:id', adminController.deleteRestaurant)
 

@@ -52,8 +52,6 @@ const adminController = {
       })
     })
   },
-
-  // 後台修改個別餐廳
   putRestaurant: (req, res) => {
     adminService.putRestaurant(req, res, data => {
       if (data['status'] === 'error') {
