@@ -4,4 +4,7 @@ const adminController = require('../controllers/api/adminController')
 
 router.get('/admin/restaurants', adminController.getRestaurants)
 
+// 後台瀏覽個別餐廳
+router.get('/admin/restaurants/:id', adminController.getRestaurant)
+
 module.exports = router
