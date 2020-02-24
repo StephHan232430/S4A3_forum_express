@@ -3,10 +3,14 @@ const router = express.Router()
 
 const adminController = require('../controllers/api/adminController')
 const categoryController = require('../controllers/api/categoryController')
+const userController = require('../controllers/api/userController')
+
 const multer = require('multer')
 const upload = multer({
   dest: 'temp/'
 })
+
+router.post('/signin', userController.signIn)
 
 router.get('/admin/restaurants', adminController.getRestaurants)
 
