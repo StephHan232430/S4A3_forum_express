@@ -69,8 +69,6 @@ const adminService = {
       })
     }
   },
-
-  // 後台修改個別餐廳
   putRestaurant: (req, res, callback) => {
     let {
       name,
@@ -161,11 +159,6 @@ const adminService = {
             status: 'success',
             message: `Role of ${user.email} was successfully changed`
           })
-          // req.flash(
-          //   'success_messages',
-          //   `Role of ${user.email} was successfully changed`
-          // )
-          // res.redirect('/admin/users')
         })
     })
   }
