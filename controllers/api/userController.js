@@ -1,6 +1,14 @@
 const bcrypt = require('bcryptjs')
 const db = require('../../models')
 const User = db.User
+const Comment = db.Comment
+const Restaurant = db.Restaurant
+const Favorite = db.Favorite
+const Like = db.Like
+const Followship = db.Followship
+const userService = require('../../services/userService')
+const imgur = require('imgur-node-api')
+const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const jwt = require('jsonwebtoken')
 const passportJWT = require('passport-jwt')
@@ -58,6 +66,51 @@ let userController = {
         token,
         user: { id, name, email, isAdmin }
       })
+    })
+  },
+  addFavorite: (req, res) => {
+    userService.addFavorite(req, res, data => {
+      return res.json(data)
+    })
+  },
+  removeFavorite: (req, res) => {
+    userService.removeFavorite(req, res, data => {
+      return res.json(data)
+    })
+  },
+  addLike: (req, res) => {
+    userService.addLike(req, res, data => {
+      return res.json(data)
+    })
+  },
+  removeLike: (req, res) => {
+    userService.removeLike(req, res, data => {
+      return res.json(data)
+    })
+  },
+  getTopUser: (req, res) => {
+    userService.getTopUser(req, res, data => {
+      return res.json(data)
+    })
+  },
+  getUser: (req, res) => {
+    userService.getUser(req, res, data => {
+      return res.json(data)
+    })
+  },
+  putUser: (req, res) => {
+    userService.putUser(req, res, data => {
+      return res.json(data)
+    })
+  },
+  addFollowing: (req, res) => {
+    userService.addFollowing(req, res, data => {
+      return res.json(data)
+    })
+  },
+  removeFollowing: (req, res) => {
+    userService.removeFollowing(req, res, data => {
+      return res.json(data)
     })
   }
 }

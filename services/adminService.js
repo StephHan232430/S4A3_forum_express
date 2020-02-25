@@ -134,6 +134,40 @@ const adminService = {
         callback({ status: 'success', message: '' })
       })
     })
+  },
+  getUsers: (req, res, callback) => {
+    return User.findAll({
+      raw: true
+    }).then(users => {
+      let loggedUserId = req.user.id
+      for (user of users) {
+        if (user.id === loggedUserId) {
+          user.showLink = false
+        } else {
+          user.showLink = true
+        }
+      }
+      return callback({ users })
+    })
+  },
+  putUser: (req, res, callback) => {
+    return User.findByPk(req.params.id).then(user => {
+      user
+        .update({
+          isAdmin: !user.isAdmin
+        })
+        .then(user => {
+          return callback({
+            status: 'success',
+            message: `Role of ${user.email} was successfully changed`
+          })
+          // req.flash(
+          //   'success_messages',
+          //   `Role of ${user.email} was successfully changed`
+          // )
+          // res.redirect('/admin/users')
+        })
+    })
   }
 }
 

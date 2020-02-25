@@ -69,41 +69,17 @@ const adminController = {
       }
     })
   },
-
-  // 使用者權限管理
-  // 顯示使用者清單
   getUsers: (req, res) => {
-    return User.findAll({
-      raw: true
-    }).then(users => {
-      // 登入中使用者不顯示權限變換選項
-      let loggedUserId = req.user.id
-      for (user of users) {
-        if (user.id === loggedUserId) {
-          user.showLink = false
-        } else {
-          user.showLink = true
-        }
-      }
-      return res.render('admin/users', {
-        users
-      })
+    adminService.getUsers(req, res, data => {
+      return res.render('admin/users', data)
     })
   },
-  // 修改使用者權限
   putUser: (req, res) => {
-    return User.findByPk(req.params.id).then(user => {
-      user
-        .update({
-          isAdmin: !user.isAdmin
-        })
-        .then(user => {
-          req.flash(
-            'success_messages',
-            `Role of ${user.email} was successfully changed`
-          )
-          res.redirect('/admin/users')
-        })
+    adminService.putUser(req, res, data => {
+      if (data['status'] === 'success') {
+        req.flash('success_messages', data['message'])
+        return res.redirect('/admin/users')
+      }
     })
   }
 }

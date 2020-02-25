@@ -3,7 +3,7 @@ const Restaurant = db.Restaurant
 const Category = db.Category
 const adminService = require('../../services/adminService')
 
-const apiAdminController = {
+const adminController = {
   getRestaurants: (req, res) => {
     adminService.getRestaurants(req, res, data => {
       return res.json(data)
@@ -19,8 +19,6 @@ const apiAdminController = {
       return res.json(data)
     })
   },
-
-  // 後台修改個別餐廳
   putRestaurant: (req, res) => {
     adminService.putRestaurant(req, res, data => {
       return res.json(data)
@@ -30,7 +28,17 @@ const apiAdminController = {
     adminService.deleteRestaurant(req, res, data => {
       return res.json(data)
     })
+  },
+  getUsers: (req, res) => {
+    adminService.getUsers(req, res, data => {
+      return res.json(data)
+    })
+  },
+  putUser: (req, res) => {
+    adminService.putUser(req, res, data => {
+      return res.json(data)
+    })
   }
 }
 
-module.exports = apiAdminController
+module.exports = adminController

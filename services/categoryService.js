@@ -10,9 +10,11 @@ const categoryService = {
         Category.findByPk(req.params.id, {
           raw: true
         }).then(category => {
-          return res.render('admin/categories', {
-            categories,
-            category
+          return callback({
+            status: 'success',
+            message: '',
+            category,
+            categories
           })
         })
       } else {

@@ -29,50 +29,64 @@ const authenticatedAdmin = (req, res, next) => {
   res.redirect('/signin')
 }
 
+// Done
 router.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
 
+// Done
 router.get('/restaurants', authenticated, restController.getRestaurants)
 
+// Done
 router.get('/restaurants/feeds', authenticated, restController.getFeeds)
 
-// 要放在/restaurants/:id之前才解析得到
+// Done
 router.get('/restaurants/top', authenticated, restController.getTopRestaurant)
 
+// Done
 router.get('/restaurants/:id/stat', authenticated, restController.getStat)
 
+// Done
 router.get('/restaurants/:id', authenticated, restController.getRestaurant)
 
+// Done
 router.post(
   '/favorite/:restaurantId',
   authenticated,
   userController.addFavorite
 )
 
+// Done
 router.delete(
   '/favorite/:restaurantId',
   authenticated,
   userController.removeFavorite
 )
 
+// Done
 router.post('/like/:restaurantId', authenticated, userController.addLike)
 
+// Done
 router.delete('/like/:restaurantId', authenticated, userController.removeLike)
 
+// Done
 router.post('/comments', authenticated, commentController.postComment)
 
+// Done
 router.delete(
   '/comments/:id',
   authenticatedAdmin,
   commentController.deleteComment
 )
 
+// Done
 router.get('/users/top', authenticated, userController.getTopUser)
 
-// Profile相關路由
+// Done
 router.get('/users/:id', authenticated, userController.getUser)
 
+// 免
 router.get('/users/:id/edit', authenticated, userController.editUser)
 
+// Done
 router.put(
   '/users/:id',
   authenticated,
@@ -80,30 +94,36 @@ router.put(
   userController.putUser
 )
 
+// Done
 router.post('/following/:userId', authenticated, userController.addFollowing)
 
+// Done
 router.delete(
   '/following/:userId',
   authenticated,
   userController.removeFollowing
 )
 
+// Done
 router.get('/admin', authenticatedAdmin, (req, res) =>
   res.redirect('/admin/restaurants')
 )
 
+// Done
 router.get(
   '/admin/restaurants',
   authenticatedAdmin,
   adminController.getRestaurants
 )
 
+// 免
 router.get(
   '/admin/restaurants/create',
   authenticatedAdmin,
   adminController.createRestaurant
 )
 
+// Done
 router.post(
   '/admin/restaurants',
   authenticatedAdmin,
@@ -111,19 +131,21 @@ router.post(
   adminController.postRestaurant
 )
 
+// Done
 router.get(
   '/admin/restaurants/:id',
   authenticatedAdmin,
   adminController.getRestaurant
 )
 
+// 免
 router.get(
   '/admin/restaurants/:id/edit',
   authenticatedAdmin,
   adminController.editRestaurant
 )
 
-// 後台修改個別餐廳
+// Done
 router.put(
   '/admin/restaurants/:id',
   authenticatedAdmin,
@@ -131,52 +153,64 @@ router.put(
   adminController.putRestaurant
 )
 
+// Done
 router.delete(
   '/admin/restaurants/:id',
   authenticatedAdmin,
   adminController.deleteRestaurant
 )
 
+// Done
 router.get('/admin/users', authenticatedAdmin, adminController.getUsers)
 
+// Done
 router.put('/admin/users/:id', authenticatedAdmin, adminController.putUser)
 
+// Done
 router.get(
   '/admin/categories',
   authenticatedAdmin,
   categoryController.getCategories
 )
 
+// Done
 router.post(
   '/admin/categories',
   authenticatedAdmin,
   categoryController.postCategory
 )
 
+// Done
 router.get(
   '/admin/categories/:id',
   authenticatedAdmin,
   categoryController.getCategories
 )
 
+// Done
 router.put(
   '/admin/categories/:id',
   authenticatedAdmin,
   categoryController.putCategory
 )
 
+// Done
 router.delete(
   '/admin/categories/:id',
   authenticatedAdmin,
   categoryController.deleteCategory
 )
 
+// 免？
 router.get('/signup', userController.signUpPage)
 
+// Done
 router.post('/signup', userController.signUp)
 
+// 免？
 router.get('/signin', userController.signInPage)
 
+// Done
 router.post(
   '/signin',
   passport.authenticate('local', {
